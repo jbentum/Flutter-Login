@@ -13,6 +13,28 @@ class LoginState extends State<Login> {
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  String _welcomeString = "";
+
+  void _erase() {
+    setState(
+      () {
+        _userController.clear();
+        _passwordController.clear();
+      },
+    );
+  }
+
+  void _showWelcome() {
+    setState(() {
+      if (_userController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty) {
+        _welcomeString = _userController.text;
+      } else {
+        _welcomeString = "Nothing";
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +46,7 @@ class LoginState extends State<Login> {
       backgroundColor: Colors.blueGrey,
       body: Container(
         alignment: Alignment.topCenter,
-        child: Column(
+        child: ListView(
           children: [
             // image profile
             Image.asset(
@@ -54,6 +76,7 @@ class LoginState extends State<Login> {
                       hintText: 'Password',
                       icon: Icon(Icons.lock),
                     ),
+                    obscureText: true,
                   ),
 
                   // Padding to create a space between the login and password
@@ -70,7 +93,7 @@ class LoginState extends State<Login> {
                         ),
 
                         ElevatedButton(
-                          onPressed: () => debugPrint("Login"),
+                          onPressed: _showWelcome,
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red),
@@ -91,7 +114,7 @@ class LoginState extends State<Login> {
                         ),
 
                         ElevatedButton(
-                          onPressed: () => debugPrint("Clear"),
+                          onPressed: _erase,
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red),
@@ -116,10 +139,10 @@ class LoginState extends State<Login> {
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Text(
-                  "Welcome Jeffery",
-                  style: TextStyle(
+                  "Welcome, $_welcomeString",
+                  style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w500),
                 )
               ],
